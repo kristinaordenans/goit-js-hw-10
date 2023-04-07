@@ -9,13 +9,15 @@ const searchForm = document.querySelector('#search-box');
 const countryList = document.querySelector('.country-list');
 const countryInfo = document.querySelector('.country-info');
 
-searchForm.addEventListener('input', debounce(onSearch,DEBOUNCE_DELAY));
+searchForm.addEventListener('input', debounce(onSearch, DEBOUNCE_DELAY));
 
 
 function onSearch(e) {
     e.preventDefault();
     const searchCountry = searchForm.value.trim();
     if (!searchCountry) {
+        countryList.innerHTML = ``;
+        countryInfo.innerHTML = ``;
         return;
     }
     
@@ -28,27 +30,16 @@ function onSearch(e) {
         } else if (data.length >= 2 && data.length <= 10) {
             countryInfo.innerHTML = ``;
             return countryListInfo(data);
-        } return countryCardInfo(data)
-    })
+        } return countryCardInfo(data);
+        })
         .catch(error => {
             countryList.innerHTML = ``;
             countryInfo.innerHTML = ``;
             Notiflix.Notify.failure(error.message);
-        })
-        .finally(() => {
-            function checkForm() {
-                if (searchCountry.length <= 1) {
-                    Notiflix.Notify.info(`Enter the name of the country`);
-                    countryList.innerHTML = ``;
-                    countryInfo.innerHTML = ``;
-                }
-            }           
-            setTimeout(checkForm, DEBOUNCE_DELAY);
-        });
+        });           
 }
 
 function countryCardInfo(country){
-            console.log(country)
     countryList.innerHTML = ``;
     const countriesListMarckup = country.map(({ name, flags, languages, capital, population }) =>
         `<div style="display: flex;"><img width="50px" height="auto" style="margin-right: 10px" src="${flags.svg}" alt="Flag of ${name.official}"><span style="font-size: 24px; font-weight: 700">${name.official}</span></div><div style="margin-top: 10px"><b>Capital: </b>${capital}</div><div><b>Population: </b>${population}</div></div><div><b>Languages: </b>${Object.values(languages)}</div>`).join("");
@@ -61,3 +52,5 @@ function countryListInfo(countries) {
     countryList.innerHTML = countriesListMarckup;
     countryList.style.listStyle = "none";
 }
+
+
