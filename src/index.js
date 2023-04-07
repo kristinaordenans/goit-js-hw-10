@@ -18,6 +18,7 @@ function onSearch(e) {
     if (!searchCountry) {
         countryList.innerHTML = ``;
         countryInfo.innerHTML = ``;
+        Notiflix.Notify.info(`Enter name of country`);
         return;
     }
     
